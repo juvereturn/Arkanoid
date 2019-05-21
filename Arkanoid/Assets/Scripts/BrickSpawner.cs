@@ -21,22 +21,22 @@ public class BrickSpawner : MonoBehaviour {
     public Brick[] brickPrefabs;
 
     //Store the bricks on the scene
-    private List<Brick> bricks = new List<Brick>();
+    [HideInInspector]public List<Brick> bricks = new List<Brick>();
 
-	// Use this for initialization
-	void Start () {
-        ResetLevel();
+    void Awake()
+    {
+        SpawnBrickPrefabs();
+    }
+
+    // Use this for initialization
+    void Start () {
+        
     }
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
-
-    public void ResetLevel() {
-        DestroyBricks();
-        SpawnBrickPrefabs();
-    }
 
     void SpawnBrickPrefabs() {
 
@@ -62,10 +62,4 @@ public class BrickSpawner : MonoBehaviour {
         return brickPrefabs[randomBrickIndex];
     }
 
-    void DestroyBricks() {
-        foreach (Brick brick in bricks) {
-            Destroy(brick);
-        }
-        bricks.Clear();
-    }
 }

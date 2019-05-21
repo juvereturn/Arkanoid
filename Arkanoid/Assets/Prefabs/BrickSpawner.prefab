@@ -63,7 +63,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1392141731784848}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.98, y: 4.69212, z: 0}
+  m_LocalPosition: {x: -5.55, y: 5.18, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4179308709685514}
@@ -81,10 +81,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firstSpawnPoint: {fileID: 1392141731784848}
-  row: 5
-  col: 8
-  spacingX: 2
-  spacingY: 1
+  row: 10
+  col: 10
+  spacingX: 1.25
+  spacingY: 0.5
   brickPrefabs:
   - {fileID: 114059984384395934, guid: 7fae97e8349b73442a74a890adcabd6a, type: 2}
   - {fileID: 114640471438159846, guid: 73706b259c2d6274bb115d1f81d053f2, type: 2}

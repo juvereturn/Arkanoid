@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
+    public int lives = 3;
+
     public float speed = 5f;
 
     private float input;
@@ -24,6 +26,10 @@ public class PlayerController : MonoBehaviour {
     private void FixedUpdate() {
         //Move the player character only in horizontal direction
         GetComponent<Rigidbody2D>().velocity = input * Vector2.right * speed;
+    }
+
+    public void DecreaseALife() {
+        lives--;
     }
 
     //Respawn at ballSpawnerPosition and make it a child of player
