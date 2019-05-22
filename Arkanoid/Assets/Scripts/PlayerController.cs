@@ -33,10 +33,6 @@ public class PlayerController : MonoBehaviour {
         GetComponent<Rigidbody2D>().velocity = input * Vector2.right * speed;
     }
 
-    public void DecreaseALife() {
-        lives--;
-    }
-
     //Respawn at ballSpawnerPosition and make it a child of player
     public void RespawnBall() {
         Instantiate(ball, ballSpawnerPosition.transform.transform.position, Quaternion.identity, this.transform);
