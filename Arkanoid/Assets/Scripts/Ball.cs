@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Ball : MonoBehaviour {
+    [Tooltip("the initial speed of the ball")]
     public float speed = 200f;
 
-    private Rigidbody2D rb;
+    //Check if the ball is still attached to players or not
     private bool ballInPlay = false;
-
-    public PlayerController player;
 
     //min and max of viewport for checking if the projectile is off-screen 
     Vector2 minViewport;
 
     GameManager gameManager;
+
+    private Rigidbody2D rb;
 
     // Use this for initialization
     void Start () {
@@ -23,10 +24,11 @@ public class Ball : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        //Get The Viewport EveryFrame
+        //Get The Viewport EveryFrame, and check if the ball is offscreeen
         minViewport = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
         DestroyOnOffScreen();
 
+        //Press Space to detach and shoot the ball
         if (Input.GetKeyDown(KeyCode.Space) && ballInPlay == false) {
             transform.parent = null;
             ballInPlay = true;
@@ -40,10 +42,12 @@ public class Ball : MonoBehaviour {
     {
         if (transform.position.y < minViewport.y)
         {
+            //Destroy the ball,and subtract 1 life from the player
             Destroy(gameObject);
             gameManager.activePlayer.lives--;
 
-            gameManager.CheckDeath();
+            //Check whether if players have life <= 0 (if life <= 0, the game is over)
+            gameManager.CheckGameOver();
 
             //Ignore the respawn process if the game is over
             if (gameManager.gameOver)
@@ -51,7 +55,7 @@ public class Ball : MonoBehaviour {
                 return;
             }
 
-
+            //Respawn ball at the ball spawn position
             gameManager.activePlayer.RespawnBall();
         }
     }

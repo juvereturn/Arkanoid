@@ -17,13 +17,15 @@ public class Brick : MonoBehaviour {
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
+        //Destroy the gameObject and add score if it collides with a ball
         if (collision.gameObject.GetComponent<Ball>() != null)
         {
             gameManager.AddScore(10);
 
-            if (gameManager.brickSpawner.bricks.Contains(this))
+            //remove a brick from bricks storage in order to check whether the game is over
+            if (gameManager.brickList.Contains(this))
             {
-                gameManager.brickSpawner.bricks.Remove(this);
+                gameManager.brickList.Remove(this);
             }
 
             Destroy(this.gameObject);

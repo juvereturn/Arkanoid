@@ -20,9 +20,6 @@ public class BrickSpawner : MonoBehaviour {
     [Tooltip("Brick Prefab Of Different Color To Be Spawn")]
     public Brick[] brickPrefabs;
 
-    //Store the bricks on the scene
-    [HideInInspector]public List<Brick> bricks = new List<Brick>();
-
     void Awake()
     {
         SpawnBrickPrefabs();
@@ -39,23 +36,24 @@ public class BrickSpawner : MonoBehaviour {
 	}
 
     void SpawnBrickPrefabs() {
-
+        //If there's no Brick Prefab stored, skio this process
         if (brickPrefabs.Length <= 0) {
             return;
         }
         
+        //Spawn bricks here
         for (int i = 0; i < col; i++) {
             for (int j = 0; j < row; j++)
             {
                 Vector2 spawnPosition = (Vector2)firstSpawnPoint.transform.position + new Vector2(
                                             (i * spacingX),
                                             -j * spacingY);
-                Brick brick = Instantiate(RandomlyGenerateBrickPrefab(), spawnPosition, Quaternion.identity, this.transform);
-                bricks.Add(brick);
+                Instantiate(RandomlyGenerateBrickPrefab(), spawnPosition, Quaternion.identity, this.transform);
             }
         }
     }
 
+    //Randomly generate a brick prefab from brick prefabs list
     Brick RandomlyGenerateBrickPrefab() {
         
         int randomBrickIndex = Random.Range(0, brickPrefabs.Length);
