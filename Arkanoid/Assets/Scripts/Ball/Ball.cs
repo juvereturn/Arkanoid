@@ -15,15 +15,15 @@ namespace TrueAxion.Arkanoid
         //min and max of viewport for checking if the projectile is off-screen 
         Vector2 minViewport;
 
-        GameManager gameManager;
-
         private Rigidbody2D rb;
+
+        private BallBouncingCalculator ballBouncingCalculator;
 
         // Use this for initialization
         void Start()
         {
             rb = GetComponent<Rigidbody2D>();
-            gameManager = GameObject.FindObjectOfType<GameManager>();
+            ballBouncingCalculator = GetComponent<BallBouncingCalculator>();
         }
 
         // Update is called once per frame
@@ -50,19 +50,28 @@ namespace TrueAxion.Arkanoid
             {
                 //Destroy the ball,and subtract 1 life from the player
                 Destroy(gameObject);
-                gameManager.activePlayer.lives--;
+                PlayerController.Instance.DecreaseALife();
 
                 //Check whether if players have life <= 0 (if life <= 0, the game is over)
-                gameManager.CheckGameOver();
+                GameManager.Instance.CheckGameOver();
 
                 //Ignore the respawn process if the game is over
-                if (gameManager.gameOver)
+                if (GameManager.Instance.gameOver)
                 {
                     return;
                 }
 
                 //Respawn ball at the ball spawn position
-                gameManager.activePlayer.RespawnBall();
+                PlayerController.Instance.RespawnBall();
+            }
+        }
+
+        public void OnCollisionEnter2D(Collision2D collision)
+        {
+            //Call PlayerBall Collision if it hits a ball
+            if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Wall")
+            {
+                ballBouncingCalculator.CalculateBallBouncing(collision.contacts[0].point, (Vector2)collision.gameObject.transform.position);
             }
         }
     }

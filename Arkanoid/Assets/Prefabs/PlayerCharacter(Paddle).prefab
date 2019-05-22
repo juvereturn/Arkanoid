@@ -74,6 +74,7 @@ GameObject:
   - component: {fileID: 58714037461987332}
   - component: {fileID: 50428271166627578}
   - component: {fileID: 114781548439087116}
+  - component: {fileID: 114399370261361164}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -203,7 +204,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.05, y: 0.03}
+  m_Offset: {x: -0.05, y: 0.075}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -214,8 +215,19 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.23}
+  m_Size: {x: 1, y: 0.1}
   m_EdgeRadius: 0
+--- !u!114 &114399370261361164
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1982284532808478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dffa26d3a059aa49a1458bcb8ae1436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114684731950068796
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -351,7 +363,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 1
       minScalar: 5
       maxCurve:
         serializedVersion: 2

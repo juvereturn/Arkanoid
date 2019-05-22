@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace TrueAxion.Arkanoid
 {
+
     public class Brick : MonoBehaviour
     {
+        [SerializeField] private ParticleSystem explosionParticle;
 
-        GameManager gameManager;
-        // Use this for initialization
         void Start()
         {
-            gameManager = GameObject.FindObjectOfType<GameManager>();
+            GameManager.Instance.brickList.Add(this);
         }
 
         public void OnCollisionEnter2D(Collision2D collision)
@@ -19,15 +19,22 @@ namespace TrueAxion.Arkanoid
             //Destroy the gameObject and add score if it collides with a ball
             if (collision.gameObject.GetComponent<Ball>() != null)
             {
-                gameManager.AddScore(10);
+                GameManager.Instance.AddScore(10);
 
                 //remove a brick from bricks storage in order to check whether the game is over
-                if (gameManager.brickList.Contains(this))
-                {
-                    gameManager.brickList.Remove(this);
-                }
+                GameManager.Instance.DestroyABrick(this);
+
+                SpawnExplosionParticle();
 
                 Destroy(this.gameObject);
+            }
+        }
+
+        private void SpawnExplosionParticle() {
+            if (explosionParticle)
+            {
+                explosionParticle.startColor = this.GetComponent<SpriteRenderer>().color;
+                Instantiate(explosionParticle, this.transform.position, Quaternion.identity);
             }
         }
     }

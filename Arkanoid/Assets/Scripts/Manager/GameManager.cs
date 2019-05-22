@@ -8,6 +8,9 @@ namespace TrueAxion.Arkanoid
 {
     public class GameManager : MonoBehaviour
     {
+        public static GameManager Instance { get; private set; }
+
+
         [Tooltip("GameOverUI At the Middle canvas")]
         public GameObject gameOverUI;
 
@@ -21,14 +24,26 @@ namespace TrueAxion.Arkanoid
         static int score;
         int highScore;
 
-        [Tooltip("Store the active player character in the scene")]
-        public PlayerController activePlayer;
+        [SerializeField]
+        private UIManager uiManager;
 
         //Store the bricks on the scene to track whether the game will end or not
-        [HideInInspector] public List<Brick> brickList;
+        [HideInInspector] public List<Brick> brickList = new List<Brick>();
 
         //Track the game state
         [HideInInspector] public bool gameOver = false;
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else if (Instance != this)
+            {
+                Destroy(gameObject);
+            }
+        }
 
         void Start()
         {
@@ -40,11 +55,8 @@ namespace TrueAxion.Arkanoid
             {
                 highScore = 0;
             }
-
-            foreach (Brick enemy in FindObjectsOfType<Brick>())
-            {
-                brickList.Add(enemy);
-            }
+            uiManager.UpdateScore(score);
+            uiManager.UpdateHighScore(highScore);
         }
 
         void Update()
@@ -53,29 +65,35 @@ namespace TrueAxion.Arkanoid
             CheckGameState();
         }
 
+        /// <summary>
+        /// Destroy a brick from the brickList(Call When the brick is destroyed)
+        /// </summary>
+        /// <param name="brick"></param>
+        public void DestroyABrick(Brick brick)
+        {
+            if (brickList.Contains(brick))
+            {
+                brickList.Remove(brick);
+            }
+        }
+
         //Add score, if the score>highscore, update highscore
         public void AddScore(int amount)
         {
             score += amount;
-            if (score > highScore)
-            {
-                highScore = score;
-                PlayerPrefs.SetInt("HighScore", highScore);
-            }
+            uiManager.UpdateScore(score);
         }
 
         //Update UI text
         void UpdateUIText()
         {
-            scoreNumberUI.text = score.ToString();
-            livesNumberUI.text = activePlayer.lives.ToString();
-            highScoreNumberUI.text = highScore.ToString();
+            livesNumberUI.text = PlayerController.Instance.GetCurrentLife().ToString();
         }
 
         //Check if the game is over
         public void CheckGameOver()
         {
-            if (activePlayer.lives <= 0)
+            if (PlayerController.Instance.GetCurrentLife() <= 0)
             {
                 gameOver = true;
                 gameOverUI.SetActive(true);
@@ -87,7 +105,7 @@ namespace TrueAxion.Arkanoid
         {
             if (brickList.Count <= 0) //If all bricks are destroyed, load the scene and continue playing
             {
-                SceneManager.LoadScene("ArkanoidGameScene");
+                RestartGame();
             }
 
             //When the game is over, players can press space to reset the score and play again
@@ -96,9 +114,20 @@ namespace TrueAxion.Arkanoid
                 if (Input.GetKeyDown("space"))
                 {
                     score = 0;
-                    SceneManager.LoadScene("ArkanoidGameScene");
+                    RestartGame();
                 }
             }
+        }
+
+        void RestartGame()
+        {
+            if (score > highScore)
+            {
+                highScore = score;
+                PlayerPrefs.SetInt("HighScore", highScore);
+            }
+            uiManager.UpdateHighScore(highScore);
+            SceneManager.LoadScene("ArkanoidGameScene");
         }
 
     }
